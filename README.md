@@ -35,3 +35,15 @@ npx tsc
 Executar o arquivo gerado com o Node.js
 ...
 node dist/index.js
+
+
+Instalar a dependência para rodar processos simultāneo.
+...
+
+npm i -- save-dev concurrently
+...
+
+Compilar o arquivo Typescript. Executar o arquivo gerado.
+...
+
+npm run start:watch
