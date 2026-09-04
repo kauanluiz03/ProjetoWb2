@@ -1,10 +1,12 @@
-import express, {type Request, type Response}   from 'express'; 
+import express  from 'express'; 
 
 const app = express();
 
-app.get("/", (req: Request, res: Response) => {
-    res.send("Hello World");
-});
+import login from "./controllers/login.js";
+
+
+app.use('/', login);
+
 
 app.listen(8080 , () => {
     console.log('Servidor rodando na porta 8080: http://localhost:8080');
