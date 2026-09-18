@@ -10,6 +10,8 @@ AppDataSource.initialize().then(() =>{
 }).catch((error: unknown)=>{ 
     console.log("Error initializing Data Source:", error)});
 
+
+    
 router.get("/", (req: Request, res: Response) => {
     res.send("Hello World");
 });
