@@ -1,6 +1,14 @@
 import "dotenv/config"
 import "reflect-metadata"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
 import { DataSource } from "typeorm"
+
+import { Situations } from "./entity/Situations.js"
+import { Users } from "./entity/Users.js"
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 function requiredEnv(name: string): string {
     const value = process.env[name]
@@ -11,7 +19,9 @@ function requiredEnv(name: string): string {
 
     return value
 }
-       const dialect = process.env.DB_DIALECT ?? "mysql"
+
+const dialect = process.env.DB_DIALECT ?? "mysql"
+
 export const AppDataSource = new DataSource({
     type: dialect as "mysql" | "postgres" | "mariadb" | "mongodb",
     host: process.env.DB_HOST ?? "localhost",
@@ -19,7 +29,9 @@ export const AppDataSource = new DataSource({
     username: requiredEnv("DB_USERNAME"),
     password: requiredEnv("DB_PASSWORD"),
     database: process.env.DB_DATABASE ?? "nodeapi",
-    entities: [],
+    entities: [Users, Situations],
+    subscribers: [],
+    migrations: [path.join(__dirname, "migration", "*.js")],
     synchronize: false,
     logging: true,
 })

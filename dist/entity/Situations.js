@@ -37,7 +37,7 @@ __decorate([
     __metadata("design:type", Date)
 ], Situations.prototype, "updatedAt", void 0);
 __decorate([
-    OneToMany(() => User, (user) => user.situation),
+    OneToMany("Users", (user) => user.situation),
     __metadata("design:type", Array)
 ], Situations.prototype, "users", void 0);
 Situations = __decorate([

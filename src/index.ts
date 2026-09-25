@@ -1,9 +1,10 @@
-import express  from 'express'; 
+import "reflect-metadata"
+import express from 'express'
 
-import dotenv from "dotenv";
-dotenv.config();
+import dotenv from "dotenv"
+dotenv.config()
 
-const app = express();
+const app = express()
 
 import login from "./controllers/login.js";
 

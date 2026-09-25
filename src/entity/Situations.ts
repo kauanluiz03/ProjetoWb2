@@ -20,6 +20,6 @@ export class Situations {
     })
     updatedAt!: Date
 
-    @OneToMany(() => User, (user) => user.situation)
-    users!: User[]
+    @OneToMany("Users", (user: Users) => user.situation)
+    users!: Users[]
 }

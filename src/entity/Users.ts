@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from "typeorm"
 import type { Situations } from "./Situations.js"
 
 @Entity("users")
@@ -12,11 +12,9 @@ export class Users {
     @Column({ unique: true })
     email!: string
 
-
-    @ManyToone(() => Situations , (situations) => situations.users)
+    @ManyToOne("Situations", (situations: Situations) => situations.users)
     @JoinColumn({ name: "situation_id" })
     situation!: Situations
-    
 
     @Column("timestamp", {
         default: () => "CURRENT_TIMESTAMP",
