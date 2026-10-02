@@ -2,10 +2,22 @@ import "reflect-metadata";
 import express from 'express';
 import dotenv from "dotenv";
 dotenv.config();
+import { AppDataSource } from "./data-source.js";
 const app = express();
-import login from "./controllers/login.js";
-app.use('/', login);
-app.listen(process.env.PORT, () => {
-    console.log(`Servidor rodando na porta ${process.env.PORT}: http://localhost:${process.env.PORT}`);
+app.use(express.json());
+app.use(express.json());
+import AuthController from "./controllers/AuthController.js";
+import SituationsController from "./controllers/SituationsController.js";
+app.use('/', AuthController);
+app.use('/situations', SituationsController);
+AppDataSource.initialize()
+    .then(() => {
+    app.listen(process.env.PORT, () => {
+        console.log(`Servidor rodando na porta ${process.env.PORT}: http://localhost:${process.env.PORT}`);
+    });
+})
+    .catch((error) => {
+    console.error("Erro ao conectar ao banco de dados:", error);
+    process.exit(1);
 });
 //# sourceMappingURL=index.js.map

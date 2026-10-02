@@ -3,7 +3,6 @@ import "reflect-metadata"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { DataSource } from "typeorm"
-
 import { Situations } from "./entity/Situations.js"
 import { Users } from "./entity/Users.js"
 

@@ -6,7 +6,7 @@ export class Situations {
     @PrimaryGeneratedColumn()
     id!: number
 
-    @Column()
+    @Column({ unique: true })
     nameSituation!: string
 
     @Column("timestamp", {
