@@ -4,9 +4,52 @@ import { Situations } from '../entity/Situations.js';
 
 const router = express.Router();
 
-    
-router.get("/", (req: Request, res: Response) => {
-    res.send("Hello World situations");
+//criar lista de situações
+router.get("/", async (req: Request, res: Response) => {
+    try{
+        const situationsRepository = AppDataSource.getRepository(Situations);
+
+        const situations = await situationsRepository.find();
+
+        res.status(200).json(situations);
+
+        return
+
+    }catch(error){
+        res.status(500).json({
+            messagem: "Erro ao listar situações",
+        });
+        return
+    }
+});
+
+//criar a visualização de uma situação específica
+router.get("/:id", async (req: Request<{ id: string }>, res: Response) => {
+    try{
+
+        const { id } = req.params;
+        
+        const situationsRepository = AppDataSource.getRepository(Situations);
+
+        const situation = await situationsRepository.findOneBy({ id: parseInt(id)});
+
+        if(!situation){
+            res.status(404).json({
+                messagem: "Situação não encontrada",
+            });
+            return
+        }
+
+        res.status(200).json(situation);
+
+        return
+
+    }catch(error){
+        res.status(500).json({
+            messagem: "Erro ao listar situações",
+        });
+        return
+    }
 });
 
 router.post("/", async(req: Request, res: Response) => {

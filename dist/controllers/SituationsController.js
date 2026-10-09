@@ -2,8 +2,36 @@ import express, {} from 'express';
 import { AppDataSource } from '../data-source.js';
 import { Situations } from '../entity/Situations.js';
 const router = express.Router();
-router.get("/", (req, res) => {
-    res.send("Hello World situations");
+//criar lista de situações
+router.get("/", async (req, res) => {
+    try {
+        const situationsRepository = AppDataSource.getRepository(Situations);
+        const situations = await situationsRepository.find();
+        res.status(200).json(situations);
+        return;
+    }
+    catch (error) {
+        res.status(500).json({
+            messagem: "Erro ao listar situações",
+        });
+        return;
+    }
+});
+//criar a visualização de uma situação específica
+router.get("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const situationsRepository = AppDataSource.getRepository(Situations);
+        const situations = await situationsRepository.findOneBy({ id: parseInt(id) });
+        res.status(200).json(situations);
+        return;
+    }
+    catch (error) {
+        res.status(500).json({
+            messagem: "Erro ao listar situações",
+        });
+        return;
+    }
 });
 router.post("/", async (req, res) => {
     try {
