@@ -22,8 +22,14 @@ router.get("/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const situationsRepository = AppDataSource.getRepository(Situations);
-        const situations = await situationsRepository.findOneBy({ id: parseInt(id) });
-        res.status(200).json(situations);
+        const situation = await situationsRepository.findOneBy({ id: parseInt(id) });
+        if (!situation) {
+            res.status(404).json({
+                messagem: "Situação não encontrada",
+            });
+            return;
+        }
+        res.status(200).json(situation);
         return;
     }
     catch (error) {
@@ -33,6 +39,7 @@ router.get("/:id", async (req, res) => {
         return;
     }
 });
+//cadastrar uma nova situação
 router.post("/", async (req, res) => {
     try {
         const situationsRepository = AppDataSource.getRepository(Situations);
@@ -48,6 +55,60 @@ router.post("/", async (req, res) => {
         res.status(500).json({
             messagem: "Erro ao cadastrar situação",
         });
+    }
+});
+//atualizar a situação específica
+router.put("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        var data = req.body;
+        const situationsRepository = AppDataSource.getRepository(Situations);
+        const situation = await situationsRepository.findOneBy({ id: parseInt(id) });
+        if (!situation) {
+            res.status(404).json({
+                messagem: "Situação não encontrada",
+            });
+            return;
+        }
+        situationsRepository.merge(situation, data);
+        const updatedSituation = await situationsRepository.save(situation);
+        res.status(200).json(updatedSituation);
+        {
+            messagem: "Situação atualizada com sucesso";
+        }
+        ;
+    }
+    catch (error) {
+        res.status(500).json({
+            messagem: "Erro ao atualizar situação",
+        });
+        return;
+    }
+});
+//deletar a situação específica
+router.delete("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const situationsRepository = AppDataSource.getRepository(Situations);
+        const situation = await situationsRepository.findOneBy({ id: parseInt(id) });
+        if (!situation) {
+            res.status(404).json({
+                messagem: "Situação não encontrada",
+            });
+            return;
+        }
+        situationsRepository.remove(situation);
+        res.status(200).json();
+        {
+            messagem: "Situação removida com sucesso";
+        }
+        ;
+    }
+    catch (error) {
+        res.status(500).json({
+            messagem: "Erro ao atualizar situação",
+        });
+        return;
     }
 });
 export default router;

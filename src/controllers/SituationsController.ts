@@ -52,6 +52,7 @@ router.get("/:id", async (req: Request<{ id: string }>, res: Response) => {
     }
 });
 
+//cadastrar uma nova situação
 router.post("/", async(req: Request, res: Response) => {
 
     try{
@@ -73,5 +74,74 @@ router.post("/", async(req: Request, res: Response) => {
     });  
     
 }});
+
+
+//atualizar a situação específica
+router.put("/:id", async (req: Request<{ id: string }>, res: Response) => {
+    try{
+
+        const { id } = req.params;
+
+        var data = req.body;
+        
+        const situationsRepository = AppDataSource.getRepository(Situations);
+
+        const situation = await situationsRepository.findOneBy({ id: parseInt(id)});
+
+        if(!situation){
+            res.status(404).json({
+                messagem: "Situação não encontrada",
+            });
+            return
+        }
+
+        situationsRepository.merge(situation, data);
+        const updatedSituation = await situationsRepository.save(situation);
+
+        res.status(200).json(updatedSituation);{
+            messagem: "Situação atualizada com sucesso"
+        };
+
+
+    }catch(error){
+        res.status(500).json({
+            messagem: "Erro ao atualizar situação",
+        });
+        return
+    }
+});
+
+//deletar a situação específica
+router.delete("/:id", async (req: Request<{ id: string }>, res: Response) => {
+    try{
+
+        const { id } = req.params;
+        
+        const situationsRepository = AppDataSource.getRepository(Situations);
+
+        const situation = await situationsRepository.findOneBy({ id: parseInt(id)});
+
+        if(!situation){
+            res.status(404).json({
+                messagem: "Situação não encontrada",
+            });
+            return
+        }
+
+        situationsRepository.remove(situation);
+        
+
+        res.status(200).json();{
+            messagem: "Situação removida com sucesso"
+        };
+
+
+    }catch(error){
+        res.status(500).json({
+            messagem: "Erro ao atualizar situação",
+        });
+        return
+    }
+});
 
 export default router;
