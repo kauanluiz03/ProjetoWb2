@@ -16,7 +16,9 @@ import SituationsController from "./controllers/SituationsController.js";
 import ProductSituationsController from "./controllers/ProductSituationsController.js";
 import ProductCategoriesController from "./controllers/ProductsCategoriesController.js";
 import ProductController from "./controllers/ProductsController.js";
+import UsersController from "./controllers/UsersController.js";
 
+app.use('/users', UsersController);
 app.use('/product-situations', ProductSituationsController);
 app.use('/product-categories', ProductCategoriesController);
 app.use('/products', ProductController);
