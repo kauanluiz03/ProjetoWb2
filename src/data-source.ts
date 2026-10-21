@@ -5,6 +5,10 @@ import { fileURLToPath } from "node:url"
 import { DataSource } from "typeorm"
 import { Situations } from "./entity/Situations.js"
 import { Users } from "./entity/Users.js"
+import { ProductSituations } from "./entity/ProductSituations.js"
+import { ProductCategories } from "./entity/ProductCategories.js"
+import { Products } from "./entity/Products.js"
+
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)

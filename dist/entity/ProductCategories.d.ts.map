@@ -1,0 +1,1 @@
+{"version":3,"file":"ProductCategories.d.ts","sourceRoot":"","sources":["../../src/entity/ProductCategories.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAE,QAAQ,EAAE,MAAM,eAAe,CAAA;AAE7C,qBACa,iBAAiB;IAE1B,EAAE,EAAG,MAAM,CAAA;IAGX,IAAI,EAAG,MAAM,CAAA;IAGb,SAAS,EAAG,IAAI,CAAA;IAGhB,SAAS,EAAG,IAAI,CAAA;IAGhB,QAAQ,EAAG,QAAQ,EAAE,CAAA;CACxB"}
