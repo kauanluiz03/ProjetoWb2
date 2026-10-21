@@ -25,7 +25,7 @@ export const AppDataSource = new DataSource({
     username: requiredEnv("DB_USERNAME"),
     password: requiredEnv("DB_PASSWORD"),
     database: process.env.DB_DATABASE ?? "nodeapi",
-    entities: [Users, Situations],
+    entities: [Users, Situations, ProductSituations, ProductCategories, Products],
     subscribers: [],
     migrations: [path.join(__dirname, "migration", "*.js")],
     synchronize: false,

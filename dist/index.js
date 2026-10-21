@@ -8,6 +8,12 @@ app.use(express.json());
 app.use(express.json());
 import AuthController from "./controllers/AuthController.js";
 import SituationsController from "./controllers/SituationsController.js";
+import ProductSituationsController from "./controllers/ProductSituationsController.js";
+import ProductCategoriesController from "./controllers/ProductsCategoriesController.js";
+import ProductController from "./controllers/ProductsController.js";
+app.use('/product-situations', ProductSituationsController);
+app.use('/product-categories', ProductCategoriesController);
+app.use('/products', ProductController);
 app.use('/', AuthController);
 app.use('/situations', SituationsController);
 AppDataSource.initialize()
