@@ -2,6 +2,7 @@ import express, {} from 'express';
 import { AppDataSource } from '../data-source.js';
 import { Situations } from '../entity/Situations.js';
 import { PaginationServices } from '../services/PaginationServices.js';
+import * as yup from 'yup';
 const router = express.Router();
 //criar lista de situações
 router.get("/", async (req, res) => {
@@ -50,6 +51,11 @@ router.get("/:id", async (req, res) => {
 //cadastrar uma nova situação
 router.post("/", async (req, res) => {
     try {
+        const schema = yup.object().shape({
+            nameSituation: yup.string().required("O nome da situação é obrigatório")
+                .min(3, "O nome da situação deve ter no mínimo 3 caracteres")
+        });
+        await schema.validate(req.body, { abortEarly: false });
         const situationsRepository = AppDataSource.getRepository(Situations);
         const newSituations = situationsRepository.create(req.body);
         await situationsRepository.save(newSituations);
@@ -59,10 +65,16 @@ router.post("/", async (req, res) => {
         });
     }
     catch (error) {
-        console.error("Erro ao cadastrar situação:", error);
+        if (error instanceof yup.ValidationError) {
+            res.status(400).json({
+                messagem: error.errors,
+            });
+            return;
+        }
         res.status(500).json({
             messagem: "Erro ao cadastrar situação",
         });
+        return;
     }
 });
 //atualizar a situação específica
@@ -70,6 +82,11 @@ router.put("/:id", async (req, res) => {
     try {
         const { id } = req.params;
         var data = req.body;
+        const schema = yup.object().shape({
+            nameSituation: yup.string().required("O nome da situação é obrigatório")
+                .min(3, "O nome da situação deve ter no mínimo 3 caracteres")
+        });
+        await schema.validate(req.body, { abortEarly: false });
         const situationsRepository = AppDataSource.getRepository(Situations);
         const situation = await situationsRepository.findOneBy({ id: parseInt(id) });
         if (!situation) {
@@ -87,10 +104,15 @@ router.put("/:id", async (req, res) => {
         ;
     }
     catch (error) {
+        if (error instanceof yup.ValidationError) {
+            res.status(400).json({
+                messagem: error.errors,
+            });
+            return;
+        }
         res.status(500).json({
             messagem: "Erro ao atualizar situação",
         });
-        return;
     }
 });
 //deletar a situação específica

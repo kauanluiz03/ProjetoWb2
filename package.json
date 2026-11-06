@@ -21,7 +21,8 @@
     "pg": "^8.23.0",
     "reflect-metadata": "^0.2.2",
     "save-dev": "^0.0.1-security",
-    "typeorm": "^1.1.1"
+    "typeorm": "^1.1.1",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",

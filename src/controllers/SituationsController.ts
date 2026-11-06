@@ -2,6 +2,8 @@ import express, {type Request, type Response}   from 'express';
 import { AppDataSource } from '../data-source.js';
 import { Situations } from '../entity/Situations.js'; 
 import { PaginationServices } from '../services/PaginationServices.js';
+import * as yup from 'yup';
+
 
 const router = express.Router();
 
@@ -67,6 +69,14 @@ router.get("/:id", async (req: Request<{ id: string }>, res: Response) => {
 router.post("/", async(req: Request, res: Response) => {
 
     try{
+
+        const schema = yup.object().shape({
+            nameSituation: yup.string().required("O nome da situação é obrigatório")
+            .min (3, "O nome da situação deve ter no mínimo 3 caracteres")
+                });
+
+                await schema.validate(req.body, { abortEarly: false });
+
         const situationsRepository = AppDataSource.getRepository(Situations);
         const newSituations = situationsRepository.create(req.body);
         await situationsRepository.save(newSituations);
@@ -77,15 +87,19 @@ router.post("/", async(req: Request, res: Response) => {
         
 
     }catch(error){
-        console.error("Erro ao cadastrar situação:", error);
-        res.status(500).json({  
-        messagem: "Erro ao cadastrar situação",
-        
+        if (error instanceof yup.ValidationError) {
+            res.status(400).json({
+                messagem: error.errors,
+            });
+            return;
+        }
 
-    });  
-    
-}});
-
+        res.status(500).json({
+            messagem: "Erro ao cadastrar situação",
+        });
+        return;
+    }
+});
 
 //atualizar a situação específica
 router.put("/:id", async (req: Request<{ id: string }>, res: Response) => {
@@ -94,6 +108,13 @@ router.put("/:id", async (req: Request<{ id: string }>, res: Response) => {
         const { id } = req.params;
 
         var data = req.body;
+
+        const schema = yup.object().shape({
+            nameSituation: yup.string().required("O nome da situação é obrigatório")
+            .min (3, "O nome da situação deve ter no mínimo 3 caracteres")
+                });
+
+                await schema.validate(req.body, { abortEarly: false });
         
         const situationsRepository = AppDataSource.getRepository(Situations);
 
@@ -115,10 +136,16 @@ router.put("/:id", async (req: Request<{ id: string }>, res: Response) => {
 
 
     }catch(error){
+            if (error instanceof yup.ValidationError) {
+            res.status(400).json({
+                messagem: error.errors,
+            });
+            return;
+        }
         res.status(500).json({
             messagem: "Erro ao atualizar situação",
         });
-        return
+        
     }
 });
 
