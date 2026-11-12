@@ -3,6 +3,7 @@ import { AppDataSource } from '../data-source.js';
 import { Situations } from '../entity/Situations.js';
 import { PaginationServices } from '../services/PaginationServices.js';
 import * as yup from 'yup';
+import { Not } from 'typeorm';
 const router = express.Router();
 //criar lista de situações
 router.get("/", async (req, res) => {
@@ -57,6 +58,15 @@ router.post("/", async (req, res) => {
         });
         await schema.validate(req.body, { abortEarly: false });
         const situationsRepository = AppDataSource.getRepository(Situations);
+        const existingSituation = await situationsRepository.findOne({
+            where: { nameSituation: req.body.nameSituation }
+        });
+        if (existingSituation) {
+            res.status(400).json({
+                messagem: "Ja existe uma situação com esse nome",
+            });
+            return;
+        }
         const newSituations = situationsRepository.create(req.body);
         await situationsRepository.save(newSituations);
         res.status(201).json({
@@ -92,6 +102,17 @@ router.put("/:id", async (req, res) => {
         if (!situation) {
             res.status(404).json({
                 messagem: "Situação não encontrada",
+            });
+            return;
+        }
+        const existingSituation = await situationsRepository.findOne({
+            where: {
+                nameSituation: req.body.nameSituation, id: Not(parseInt(id)),
+            }
+        });
+        if (existingSituation) {
+            res.status(400).json({
+                messagem: "Ja existe uma situação com esse nome",
             });
             return;
         }

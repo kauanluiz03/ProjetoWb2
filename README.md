@@ -99,5 +99,9 @@ npx typeorm migration:run -d dist/data-source.js
 Validar formulario 
 
 npm i yup 
+```
+
+npm i cors
+npm install --save-dev @types/cors
 
 

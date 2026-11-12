@@ -1,11 +1,14 @@
 import "reflect-metadata";
 import express from 'express';
 import dotenv from "dotenv";
+import cors from 'cors';
 dotenv.config();
 import { AppDataSource } from "./data-source.js";
 const app = express();
 app.use(express.json());
 app.use(express.json());
+app.use(cors());
+import TesteConetionController from "./controllers/TesteConectionController.js";
 import AuthController from "./controllers/AuthController.js";
 import SituationsController from "./controllers/SituationsController.js";
 import ProductSituationsController from "./controllers/ProductSituationsController.js";
@@ -18,6 +21,7 @@ app.use('/product-categories', ProductCategoriesController);
 app.use('/products', ProductController);
 app.use('/', AuthController);
 app.use('/situations', SituationsController);
+app.use('/', TesteConetionController);
 AppDataSource.initialize()
     .then(() => {
     app.listen(process.env.PORT, () => {
